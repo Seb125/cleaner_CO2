@@ -1,7 +1,7 @@
 const cron = require('node-cron');
 const nodemailer = require('nodemailer');
 
-cron.schedule('* * * * *', () => {
+cron.schedule('0 * * * *', () => {
     // Create a transporter object using SMTP transport
 let transporter = nodemailer.createTransport({
     host: 'smtp-mail.outlook.com', // SMTP hostname
