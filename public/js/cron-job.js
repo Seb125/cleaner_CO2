@@ -29,7 +29,7 @@ async function fetchAndSaveMultipleRegions(regions) {
     }
   }
 
-cron.schedule('0 * * * *', async () => {
+cron.schedule('0 0 * * *', async () => {
     try {
         result = await fetchAndSaveMultipleRegions(regions);
         console.log(result);
