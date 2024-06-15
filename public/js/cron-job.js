@@ -25,11 +25,17 @@ async function fetchAndSaveMultipleRegions(regions) {
         "Data fetching and saving completed for all requested regions."
       );
     } catch (error) {
-      console.log("An error occurred during fetch and save:", error);
+      throw error;
     }
   }
 
-cron.schedule('0 * * * *', () => {
-    fetchAndSaveMultipleRegions(regions);
+cron.schedule('0 * * * *', async () => {
+    try {
+        result = await fetchAndSaveMultipleRegions(regions);
+        console.log(result);
+    } catch (error) {
+        console.log(error);
+    }
+    
 
 })
