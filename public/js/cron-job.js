@@ -1,32 +1,35 @@
 const cron = require('node-cron');
 const nodemailer = require('nodemailer');
+const RegionData = require('../../models/RegionData');
 
-cron.schedule('* * * * *', () => {
-    // Create a transporter object using SMTP transport
-let transporter = nodemailer.createTransport({
-    host: 'gmail',
-    auth: {
-        user: 'sebaschwarz92@gmail.com', // Your email address
-        pass: process.env.NODEMAILER_PWD // Your email password or application-specific password
+
+// Define an array of regions
+const regions = ["50Hertz", "TenneT", "TransnetBW", "Amprion"];
+
+async function fetchAndSaveMultipleRegions(regions) {
+    console.log("Fetching and saving data for regions:", regions);
+    try {
+      for (const region of regions) {
+        const url = `https://us-central1-engaged-card-410714.cloudfunctions.net/new-function-1`;
+        const response = await axios.post(url, { region }); // Pass the region in the request body
+        // only create new when not empty
+        
+        if (response.data.forecast_result.length !== 0) {
+          // here comes the code to check if dat ais not empty
+          const newData = new RegionData({ region, data: response.data });
+          await newData.save();
+          console.log("Data saved successfully for region:", region);
+        }
+      }
+      console.log(
+        "Data fetching and saving completed for all requested regions."
+      );
+    } catch (error) {
+      console.log("An error occurred during fetch and save:", error);
     }
-});
+  }
 
-// Define email options
-let mailOptions = {
-    from: 'sebaschwarz92@gmail.com', // Sender address
-    to: 'schwarz.duscheleit@hotmail.de', // List of recipients
-    subject: 'Test Email from Node.js', // Subject line
-    text: 'Hello from Node.js!', // Plain text body
-    html: '<p>Hello from <b>Node.js</b>!</p>' // HTML body (optional)
-};
-
-// Send email
-transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-        console.error('Error sending email:', error);
-    } else {
-        console.log('Email sent:', info.response);
-    }
-});
+cron.schedule('0 * * * *', () => {
+    fetchAndSaveMultipleRegions(regions);
 
 })
