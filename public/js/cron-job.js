@@ -1,24 +1,19 @@
 const cron = require('node-cron');
 const nodemailer = require('nodemailer');
 
-cron.schedule('0 * * * *', () => {
+cron.schedule('* * * * *', () => {
     // Create a transporter object using SMTP transport
 let transporter = nodemailer.createTransport({
-    host: 'smtp-mail.outlook.com', // SMTP hostname
-    secureConnection: false, // TLS requires secureConnection to be false
-    port: 587, // Port for secure SMTP
-    tls: {
-        ciphers: 'SSLv3'
-    },
+    host: 'gmail',
     auth: {
-        user: 'schwarz.duscheleit@hotmail.de', // Your email address
+        user: 'sebaschwarz92@gmail.com', // Your email address
         pass: process.env.NODEMAILER_PWD // Your email password or application-specific password
     }
 });
 
 // Define email options
 let mailOptions = {
-    from: 'schwarz.duscheleit@hotmail.de', // Sender address
+    from: 'sebaschwarz92@gmail.com', // Sender address
     to: 'schwarz.duscheleit@hotmail.de', // List of recipients
     subject: 'Test Email from Node.js', // Subject line
     text: 'Hello from Node.js!', // Plain text body
