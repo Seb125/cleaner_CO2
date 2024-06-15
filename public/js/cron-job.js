@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const nodemailer = require('nodemailer');
+const axios = require("axios");
 const RegionData = require('../../models/RegionData');
 
 
