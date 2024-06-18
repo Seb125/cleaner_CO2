@@ -42,6 +42,10 @@ router.get("/about", (req, res) => {
 
 router.get("/impressum", (req, res) => {
   res.render("impressum");
+});
+
+router.get("/datenschutz", (req, res) => {
+  res.render("datenschutz");
 })
 
 // Route to fetch data for a specific region using POST

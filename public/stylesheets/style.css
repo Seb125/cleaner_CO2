@@ -57,3 +57,7 @@ h1 {
 .region-result h1 {
    font-size: 32px;
 }
+
+.active-site {
+   color: #00b7ff;
+}
