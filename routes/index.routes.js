@@ -40,13 +40,10 @@ router.get("/about", (req, res) => {
   res.render("about");
 })
 
-router.get("/impressum", (req, res) => {
-  res.render("impressum");
+router.get("/kontakt", (req, res) => {
+  res.render("kontakt");
 });
 
-router.get("/datenschutz", (req, res) => {
-  res.render("datenschutz");
-})
 
 // Route to fetch data for a specific region using POST
 router.post("/region-data/:region", async (req, res) => {
