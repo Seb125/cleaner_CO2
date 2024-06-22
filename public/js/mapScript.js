@@ -1,4 +1,4 @@
-function saveControlArea(region) {
+export function saveControlArea(region) {
   // Save to session storage
   console.log("function is working");
   sessionStorage.setItem('selectedRegion', region);

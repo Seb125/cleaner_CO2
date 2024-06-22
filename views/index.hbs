@@ -6,11 +6,16 @@
 
     <div class=" container mx-auto px-4" id="home" style="display: block;">
         <div class="h-full text-white flex items-center flex-col pt-12">
-            <h1 class="text-5xl font-bold mb-4">Welcome to a Cleaner Tomorrow!</h1>
+            <div class="flex items-center justify-center flex-col md:flex-row">
+
+            <h1 class="text-5xl font-bold mb-4">Welcome to a </h1>
+            <h1 class="text-5xl font-bold mb-4 md:ml-3" > Cleaner</h2>
+            <h1 class="text-5xl font-bold mb-4 md:ml-3"> Tomorrow!</h1>
+            </div>
             <p class="text-xl mb-8">Join us to Reduce CO2 Emissions</p>
             <div class="h-full flex items-center justify-center flex-col">
-                <h2 class="text-3xl font-bold mb-5 controls-to-hide">What is your control area?</h2>
-                <h2 class="text-3xl font-bold mb-5 controls-to-hide">Forecast for {{ currentDate }}:</h2>
+                <h2 class="text-2xl font-bold mb-5 controls-to-hide md:text-3xl">What is your control area?</h2>
+                <h2 class="text-2xl font-bold mb-5 controls-to-hide md:text-3xl">Forecast for {{ currentDate }}:</h2>
 
                  <svg
                     id="control-map"
@@ -119,7 +124,7 @@
                     </a>
                 </svg>
                
-                <div class="controls-to-hide flex justify-evenly w-4/5 mt-3">
+                <div class="controls-to-hide flex justify-evenly w-3/5 mt-3 md:w-4/5">
                     <div class="flex items-center flex-col">
                         <div class="w-12 h-12 bg-[#BCC4C9] rounded-md"></div>
                         <span>Amprion</span>
@@ -148,6 +153,6 @@
             </div>
         </div>
     </div>
-    <script src="/js/script.js"></script>
+    <script type="module" src="/js/main.js"></script>
 </body>
 

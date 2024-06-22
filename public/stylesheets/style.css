@@ -61,3 +61,17 @@ h1 {
 .active-site {
    color: #00b7ff;
 }
+
+.footer {
+   position: relative;
+   width: 100%;
+}
+
+.overlay {
+   background-color: rgb(149, 147, 147);
+   opacity: 0.5;
+   position: absolute;
+   height: 100%;
+   width: 100%;
+   z-index: -1;
+}
