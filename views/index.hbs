@@ -4,8 +4,8 @@
 
     <!-- TODO: move control to hbs partials, move script to separate script file. -->
 
-    <div class=" container mx-auto px-4" id="home" style="display: block;">
-        <div class="h-full text-white flex items-center flex-col pt-12">
+    <div class=" container mx-auto px-4" style="display: block;">
+        <div class="h-full w-full text-white flex justify-center items-center flex-col pt-12">
             <div class="flex items-center justify-center flex-col md:flex-row">
 
             <h1 class="text-5xl font-bold mb-4">Welcome to a </h1>
@@ -20,8 +20,7 @@
                  <svg
                     id="control-map"
                     class="svg-map controls-to-hide"
-                    width="688"
-                    height="929"
+                   
                     viewBox="0 0 688 929"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -124,22 +123,26 @@
                     </a>
                 </svg>
                
-                <div class="controls-to-hide flex justify-evenly w-3/5 mt-3 md:w-4/5">
-                    <div class="flex items-center flex-col">
-                        <div class="w-12 h-12 bg-[#BCC4C9] rounded-md"></div>
-                        <span>Amprion</span>
+                <div class="controls-to-hide w-4/5 flex flex-col justify-center mt-3  md:flex-row">
+                    <div class="flex items-center flex-row justify-center">
+                        <div class="flex items-center flex-col ">
+                            <div class="w-12 h-12 bg-[#BCC4C9] rounded-md"></div>
+                            <span>Amprion</span>
+                        </div>
+                        <div class="flex items-center flex-col ml-3">
+                            <div class="w-12 h-12 bg-[#DCE1E4] rounded-md"></div>
+                            <span>TenneT</span>
+                        </div>
                     </div>
-                    <div class="flex items-center flex-col">
-                        <div class="w-12 h-12 bg-[#DCE1E4] rounded-md"></div>
-                        <span>TenneT</span>
-                    </div>
-                    <div class="flex items-center flex-col">
-                        <div class="w-12 h-12 bg-[#54B0E2] rounded-md"></div>
-                        <span>TransnetBW</span>
-                    </div>
-                    <div class="flex items-center flex-col">
-                        <div class="w-12 h-12 bg-[#A4B8D9] rounded-md"></div>
-                        <span>50Hertz</span>
+                    <div class="flex items-center flex-row justify-center">
+                        <div class="flex items-center flex-col ">
+                            <div class="w-12 h-12 bg-[#54B0E2] rounded-md"></div>
+                            <span>TransnetBW</span>
+                        </div>
+                        <div class="flex items-center flex-col ml-3">
+                            <div class="w-12 h-12 bg-[#A4B8D9] rounded-md"></div>
+                            <span>50Hertz</span>
+                        </div>
                     </div>
                 </div>
                 <div id="regionResult" class="region-result text-white text-center mt-4 space-y-5"></div> <!-- Element to display the result -->
