@@ -44,6 +44,32 @@ router.get("/kontakt", (req, res) => {
   res.render("kontakt");
 });
 
+router.get("/:region", async (req, res) => {
+  try {
+    const region = req.params.region;
+    // Retrieve the latest saved data for the region
+    const latestData = await RegionData.findOne({ region }).sort({
+      createdAt: -1,
+    });
+
+    if (!latestData) {
+      return res.status(404).send("No data found for the specified region");
+    }
+
+    // Extract forecast_result from the nested "data" object
+    const forecastResult = latestData.data.forecast_result;
+
+    console.log(forecastResult)
+    res.render("results", {data: {forecastResult: forecastResult, region: region}});
+    
+  } catch (error) {
+    console.log(error);
+  }
+
+
+
+
+});
 
 // Route to fetch data for a specific region using POST
 router.post("/region-data/:region", async (req, res) => {
