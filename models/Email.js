@@ -2,15 +2,15 @@
 const { Schema, model } = require("mongoose");
 
 
-const subscriptionSchema = new Schema({
+const emailSchema = new Schema({
   email: { type: String, required: true },
   region: { type: String, required: true },
   createdAt: { type: Date, default: Date.now }
 });
 
 
-const Subscription = model('Subscription', subscriptionSchema); // Correct the casing of regiondataSchema
+const Email = model('Email', emailSchema); // Correct the casing of regiondataSchema
 
-module.exports = Subscription;
+module.exports = Email;
 
 

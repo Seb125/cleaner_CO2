@@ -2,7 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const router = express.Router();
 const RegionData = require("../models/RegionData"); // Adjust the path as needed
-const Subscription = require("../models/Subscription");
+const Subscription = require("../models/Email");
 const emailjs = require("@emailjs/browser");
 
 // Define an array of regions

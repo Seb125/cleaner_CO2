@@ -1,5 +1,5 @@
 
-<body class="bg-cover bg-no-repeat bg-center background-image flex flex-col items-center">
+<body class="bg-cover bg-no-repeat bg-bottom background-image flex flex-col items-center scale-50">
 
     <!-- TODO: move control to hbs partials, move script to separate script file. -->
 
@@ -11,17 +11,30 @@
     <div class="flex flex-col justify-center items-center">
         <h1 class="text-4xl mb-5 text-center">Forecast for 6/24/2024</h1>
         <h1 class="text-4xl mb-5 text-center">Your region is: {{data.region}}</h1>
-        <p class="w-1/2 text-center">{{data.forecastResult}}</p>
+        <p class="w-3/5 md:w-1/2 text-center">{{data.forecastResult}}</p>
        
         </div>
       
         
               <div id="subscribeControls" class="text-center mt-8  h-2/5">
-                    <p class="m-3">Please leave your email below to subscribe to our daily recommendations</p>
-                    <form method="POST" action="" id="emailSubscriptionForm" class="px-5">
-                        <input name="email" type="email" id="emailInput" class="mx-3 bg-transparent border-2 border-white text-white font-bold rounded-lg text-lg px-6 py-2 hover:bg-white hover:text-gray-800 transition-colors duration-300" placeholder="Enter your email">
+                    <p class="m-3">You can leave your Email or WhatsApp below to subscribe to our daily recommendations</p>
+                    <form method="POST" action="" id="emailSubscriptionForm" class="px-5 flex flex-col md:flex-row md:justify-center">
+                        <div id="emailField">
+                            <input name="email" id="emailInput" class="  mx-3 bg-transparent border-2 border-white text-white font-bold rounded-lg text-lg px-6 py-3 hover:bg-white hover:text-gray-800 transition-colors duration-300" placeholder="Enter your email">
+                        </div>
                         <input name="region"  type="text" class="hidden" id="regionInput" value="{{data.region}}">
-                        <button type="submit" class="bg-black text-white font-bold rounded-lg text-lg px-6 py-2 hover:bg-gray-800 transition-colors duration-300 mt-5 md:mt-0">Submit</button>
+                        <div>
+                            <button type="submit" class="bg-black text-white font-bold rounded-lg text-lg px-6 py-3 hover:bg-gray-800 transition-colors duration-300 mt-5 md:mt-0 ">Submit</button>
+                        </div>
+                    </form>
+                    <form method="POST" action="" id="whatsAppSubscriptionForm" class="px-5 flex flex-col md:flex-row md:justify-center">
+                        <div id="phoneField">
+                            <input name="phone" id="phoneInput" class="mx-3 bg-transparent border-2 border-white text-white font-bold rounded-lg text-lg px-6 py-3 hover:bg-white hover:text-gray-800 transition-colors duration-300" placeholder="+49 ...">
+                        </div>
+                        <input name="region"  type="text" class="hidden" id="regionInput" value="{{data.region}}">
+                        <div>
+                            <button type="submit" class="bg-black text-white font-bold rounded-lg text-lg px-6 py-3 hover:bg-gray-800 transition-colors duration-300 mt-5 md:mt-0 ">Submit</button>
+                        </div>
                     </form>
                 </div>
 </div>
