@@ -60,7 +60,7 @@ module.exports = (app) => {
 
   // Handles access to the favicon
   app.use(
-    favicon(path.join(__dirname, "..", "public", "images", "favicon.ico"))
+    favicon(path.join(__dirname, "..", "public", "images", "green-power.png"))
   );
 
   // ℹ️ Middleware that adds a "req.session" information and later to check that you are who you say you are

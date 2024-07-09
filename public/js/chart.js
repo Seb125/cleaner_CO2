@@ -9,16 +9,39 @@ export function initializeChart(chartData) {
             datasets: [{
                 label: 'Forecast Data',
                 data: chartData.vals,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                backgroundColor: 'rgba(75, 192, 192, 1)',
                 borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
+                borderWidth: 4
             }]
         },
         options: {
+            plugins:{
+                legend:
+                {
+                    labels: {
+                        color: "white"
+                    }
+                }
+            },
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    grid: {
+                        color: "grey"
+                    },
+                    ticks: {
+                        color: "white"
+                    }
+                },
+                x: {
+                    grid: {
+                        color: "grey"
+                    },
+                    ticks: {
+                        color: "white"
+                    }
                 }
+                
             }
         }
     });
