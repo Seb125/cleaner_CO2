@@ -58,7 +58,6 @@ router.get("/:region", async (req, res) => {
     // Extract forecast_result from the nested "data" object
     const forecastResult = latestData.data.forecast_result;
 
-    console.log(forecastResult)
     res.render("results", {data: {forecastResult: forecastResult, region: region}});
     
   } catch (error) {
