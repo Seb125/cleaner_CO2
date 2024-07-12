@@ -21,6 +21,22 @@ export function initializeChart(chartData) {
                     labels: {
                         color: "white"
                     }
+                },
+                annotation: {
+                    annotations: {
+                        shadedRegion1: {
+                            type: 'box',
+                            xMin: chartData.time_frames[0].start, // 1pm (13:00)
+                            xMax: chartData.time_frames[0].end, // 2pm (14:00)
+                            backgroundColor: 'rgba(72, 236, 89, 0.25)'
+                        },
+                        shadedRegion2: {
+                            type: 'box',
+                            xMin: chartData.time_frames[1].start, // 1pm (13:00)
+                            xMax: chartData.time_frames[1].end, // 2pm (14:00)
+                            backgroundColor: 'rgba(255, 99, 132, 0.25)'
+                        }
+                    }
                 }
             },
             scales: {

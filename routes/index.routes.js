@@ -14,7 +14,7 @@ async function fetchAndSaveMultipleRegions(regions) {
       const url = `https://us-central1-engaged-card-410714.cloudfunctions.net/new-function-1`;
       const response = await axios.post(url, { region }); // Pass the region in the request body
       // only create new when not empty
-      
+
       if (response.data.forecast_result.length !== 0) {
         // here comes the code to check if dat ais not empty
         const newData = new RegionData({ region, data: response.data });
@@ -26,7 +26,7 @@ async function fetchAndSaveMultipleRegions(regions) {
       "Data fetching and saving completed for all requested regions."
     );
   } catch (error) {
-    throw  error;
+    throw error;
   }
 }
 
@@ -37,10 +37,22 @@ router.get("/", (req, res) => {
 
 router.get("/about", (req, res) => {
   res.render("about");
-})
+});
 
 router.get("/kontakt", (req, res) => {
   res.render("kontakt");
+});
+
+// Manual test route for data fetching and saving
+router.get("/test-fetch", async (req, res) => {
+  console.log("Manual test fetch initiated at", new Date());
+  try {
+    await fetchAndSaveMultipleRegions(regions);
+    res.send("Data fetching and saving initiated successfully.");
+  } catch (error) {
+    console.error("Error during test fetch:", error);
+    res.status(500).send("Error during test fetch.");
+  }
 });
 
 router.get("/:region", async (req, res) => {
@@ -57,16 +69,44 @@ router.get("/:region", async (req, res) => {
 
     // Extract forecast_result from the nested "data" object
     const forecastResult = latestData.data.forecast_result;
-
-    res.render("results", {data: {forecastResult: forecastResult, region: region}});
+    console.log(latestData.data.generation_data)
+    // Extract time frames form text data
+    const timeRangePattern =
+      /(\b([01]?[0-9]|2[0-3]):[0-5][0-9] to \b([01]?[0-9]|2[0-3]):[0-5][0-9]\b)/g;
+    let match;
+    const hours = [];
     
+    while ((match = timeRangePattern.exec(forecastResult)) !== null) {
+      // Extract the start hour and end hour
+      const startHour = match[0].split(":")[0]; // Get the hour before the first colon
+      const endHour = match[0].split("to")[1].split(":")[0].trim(); // Get the hour before the second colon
+
+      hours.push({
+        start: parseInt(startHour, 10),
+        end: parseInt(endHour, 10),
+      });
+    }
+
+    // also electricity values need to be sent to frontend
+    const wind_energy_values = latestData.data.generation_data;
+    // add last value to index 0, as this aligns with the graph in the frontend
+    wind_energy_values.unshift(wind_energy_values.pop());
+    //only use the raw numbers
+    const wind_energy_numbers = wind_energy_values.map((item) => {
+      return (
+        item["Wind Generation"]
+      )
+    });
+
+
+    console.log(hours);
+
+    res.render("results", {
+      data: { forecastResult: forecastResult, region: region, time_frames: JSON.stringify(hours), wind_energy_numbers: JSON.stringify(wind_energy_numbers) },
+    });
   } catch (error) {
     console.log(error);
   }
-
-
-
-
 });
 
 // Route to fetch data for a specific region using POST
@@ -88,125 +128,16 @@ router.post("/region-data/:region", async (req, res) => {
     const forecastResult = latestData.data.forecast_result;
 
     // Respond with a success message and forecast_result
-    res
-      .status(200)
-      .json({
-        message: `Latest data fetched and saved for region: ${region}`,
-        forecast_result: forecastResult,
-      });
+    res.status(200).json({
+      message: `Latest data fetched and saved for region: ${region}`,
+      forecast_result: forecastResult,
+    });
   } catch (error) {
     console.error("Server error:", error);
     res.status(500).send("Server error");
   }
 });
 
-router.get("/emailjs", async (req, res) => {
-  try {
-    const regions = ["50Hertz", "TenneT", "TransnetBW", "Amprion"];
-    await fetchAndSaveMultipleRegions(regions);
-    const Hertz = await RegionData.findOne({ region: "50Hertz" }).sort({
-      createdAt: -1,
-    });
-    const TenneT = await RegionData.findOne({ region: "TenneT" }).sort({
-      createdAt: -1,
-    });
-    const TransnetBW = await RegionData.findOne({ region: "TransnetBW" }).sort({
-      createdAt: -1,
-    });
-    const Amprion = await RegionData.findOne({ region: "Amprion" }).sort({
-      createdAt: -1,
-    });
 
-    const subscribers = await Subscription.find();
-
-
-    let hertzArray = [];
-    let tennetArray = [];
-    let transnetArray = [];
-    let amprionArray = [];
-
-    const emailAdresses = subscribers.map((sub) => {
-      switch (sub.region) {
-        case "50Hertz":
-          hertzArray.push(sub.email);
-          break;
-        case "TenneT":
-          tennetArray.push(sub.email);
-          break;
-        case "TransnetBW":
-          transnetArray.push(sub.email);
-          break;
-        case "Amprion":
-          amprionArray.push(sub.email);
-          break;
-      }
-    });
-
-    const hertzbccEmails = hertzArray.join(",");
-    const tennetbccEmails = tennetArray.join(",");
-    const transnetbccEmails = transnetArray.join(",");
-    const amprionbccEmails = amprionArray.join(",");
-
-    // // Construct the email message object
-    const messages = [
-      {
-        to_email: "schwarz.duscheleit@hotmail.de",
-        bcc: hertzbccEmails,
-        subject: "Hello Energy SAVER - 50Hertz",
-        message: Hertz.data.forecast_result,
-      },
-      {
-        to_email: "schwarz.duscheleit@hotmail.de",
-        bcc: tennetbccEmails,
-        subject: "Hello Energy SAVER - TenneT",
-        message: TenneT.data.forecast_result,
-      },
-      {
-        to_email: "schwarz.duscheleit@hotmail.de",
-        bcc: transnetbccEmails,
-        subject: "Hello Energy SAVER - TransnetBW",
-        message: TransnetBW.data.forecast_result,
-      },
-      {
-        to_email: "schwarz.duscheleit@hotmail.de",
-        bcc: amprionbccEmails,
-        subject: "Hello Energy SAVER - Amprion",
-        message: Amprion.data.forecast_result,
-      }
-    ];
-
-    // emailjs.init(process.env.EMAIL_USER_ID);
-
-    // emailPromises = messages.map((message) => {
-      
-    //     emailjs.send(
-    //       process.env.EMAIL_SERVICE_ID,
-    //       process.env.EMAIL_TEMPLATE_ID,
-    //       message
-    //   )
-    // }
-    // );
-
-    // await Promise.all(emailPromises);
-
-    res.json({
-      messages: messages,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-// Manual test route for data fetching and saving
-router.get("/test-fetch", async (req, res) => {
-  console.log("Manual test fetch initiated at", new Date());
-  try {
-    await fetchAndSaveMultipleRegions(regions);
-    res.send("Data fetching and saving initiated successfully.");
-  } catch (error) {
-    console.error("Error during test fetch:", error);
-    res.status(500).send("Error during test fetch.");
-  }
-});
 
 module.exports = router;

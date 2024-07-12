@@ -83,11 +83,15 @@
   <div style="height: 800px;">
 
   </div>
+  
   <script src="/js/subscription.js"></script>
   <script type="module">
     import { initializeChart } from "/js/chart.js"
+    // Accessing HBS data
 
-    const chartData = {labels: ["Jan", "Febr", "March", "June"], vals: [0.1,0.2,0.4,0.5]}
+    const timeFrameData = JSON.parse(`{{{data.time_frames}}}`);
+    const windEnergyData = JSON.parse(`{{{data.wind_energy_numbers}}}`);
+    const chartData = {labels: Array.from({ length: 24 }, (_, i) => i + ":00"), vals: windEnergyData, time_frames: timeFrameData}
 
     initializeChart(chartData)
 
