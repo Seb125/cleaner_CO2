@@ -102,7 +102,7 @@ router.get("/:region", async (req, res) => {
     console.log(hours);
 
     res.render("results", {
-      data: { forecastResult: forecastResult, region: region, time_frames: JSON.stringify(hours), wind_energy_numbers: JSON.stringify(wind_energy_numbers) },
+      data: { forecastResult: forecastResult, region: region, time_frames: JSON.stringify(hours), wind_energy_numbers: JSON.stringify(wind_energy_numbers), currentDate: new Date().toLocaleDateString() },
     });
   } catch (error) {
     console.log(error);
