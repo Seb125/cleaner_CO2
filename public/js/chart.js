@@ -97,7 +97,15 @@ export function initializeChart(chartData) {
                     },
                     ticks: {
                         color: "white"
+                    },
+                    title: {
+                    display: true,
+                    text: 'Energy (V)',  // Replace with your Y-axis label
+                    color: 'white',
+                    font: {
+                        size: 16
                     }
+                }
                 },
                 x: {
                     grid: {
@@ -105,7 +113,15 @@ export function initializeChart(chartData) {
                     },
                     ticks: {
                         color: "white"
+                    },
+                    title: {
+                    display: true,
+                    text: 'Time',  // Replace with your Y-axis label
+                    color: 'white',
+                    font: {
+                        size: 16
                     }
+                }
                 }
                 
             }

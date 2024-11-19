@@ -56,20 +56,9 @@ router.get("/test-fetch", async (req, res) => {
 });
 
 router.get("/:region", async (req, res) => {
-  try {
-    const region = req.params.region;
-    // Retrieve the latest saved data for the region
-    const latestData = await RegionData.findOne({ region }).sort({
-      createdAt: -1,
-    });
 
-    if (!latestData) {
-      return res.status(404).send("No data found for the specified region");
-    }
+  const extractHours = (forecastResult) => {
 
-    // Extract forecast_result from the nested "data" object
-    const forecastResult = latestData.data.forecast_result;
-    console.log(latestData.data.generation_data)
     // Extract time frames form text data
     const timeRangePattern =
       /(\b([01]?[0-9]|2[0-3]):[0-5][0-9] to \b([01]?[0-9]|2[0-3]):[0-5][0-9]\b)/g;
@@ -87,6 +76,47 @@ router.get("/:region", async (req, res) => {
       });
     }
 
+    return hours;
+  }
+
+  try {
+    
+    const region = req.params.region;
+    // Retrieve the latest saved data for the region
+    let latestData = await RegionData.findOne({ region }).sort({
+      createdAt: -1,
+    });
+
+    if (!latestData) {
+      return res.status(404).send("No data found for the specified region");
+    }
+
+    // check if forecast result is available, otherwise provide second last entry in database
+
+    // Extract forecast_result from the nested "data" object
+    let forecastResult = latestData.data.forecast_result;
+
+    let hours = extractHours(forecastResult);
+    console.log("Hours", hours)
+    if (hours.length == 0) {
+      const result = await RegionData.find({ region })
+      .sort({
+        createdAt: -1,
+      })
+      .skip(1)
+      .limit(1);
+      latestData = result[0]
+      console.log("Latest Data", latestData)
+      // replace hours with second latest data available
+      forecastResult = latestData.data.forecast_result;
+      hours = extractHours(forecastResult)
+    }
+
+    
+    
+    console.log(latestData)
+    
+    console.log("hours", hours)
     // also electricity values need to be sent to frontend
     const wind_energy_values = latestData.data.generation_data;
     // add last value to index 0, as this aligns with the graph in the frontend
@@ -126,7 +156,7 @@ router.post("/region-data/:region", async (req, res) => {
 
     // Extract forecast_result from the nested "data" object
     const forecastResult = latestData.data.forecast_result;
-
+    console.log("forecast Result", forecastResult)
     // Respond with a success message and forecast_result
     res.status(200).json({
       message: `Latest data fetched and saved for region: ${region}`,
