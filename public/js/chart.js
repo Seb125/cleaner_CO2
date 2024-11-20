@@ -100,7 +100,7 @@ export function initializeChart(chartData) {
                     },
                     title: {
                     display: true,
-                    text: 'Energy (V)',  // Replace with your Y-axis label
+                    text: 'MWh',  // Replace with your Y-axis label
                     color: 'white',
                     font: {
                         size: 16
