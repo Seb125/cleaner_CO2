@@ -100,7 +100,7 @@ export function initializeChart(chartData) {
                     },
                     title: {
                     display: true,
-                    text: 'MWh',  // Replace with your Y-axis label
+                    text: 'Renewable energy generation (MWh)',  // Replace with your Y-axis label
                     color: 'white',
                     font: {
                         size: 16
