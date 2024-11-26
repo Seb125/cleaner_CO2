@@ -63,7 +63,7 @@ export function initializeChart(chartData) {
 
     }
     
-
+    console.log("Chart data values", chartData.vals)
 
     const forecastChart = new Chart(ctx, {
         type: 'line',

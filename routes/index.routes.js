@@ -97,7 +97,7 @@ router.get("/:region", async (req, res) => {
     let forecastResult = latestData.data.forecast_result;
 
     let hours = extractHours(forecastResult);
-    console.log("Hours", hours)
+    
     if (hours.length == 0) {
       const result = await RegionData.find({ region })
       .sort({
@@ -114,13 +114,20 @@ router.get("/:region", async (req, res) => {
 
     
     
-    console.log(latestData)
     
-    console.log("hours", hours)
     // also electricity values need to be sent to frontend
     const wind_energy_values = latestData.data.generation_data;
+
+    // summer winter time: winter (array starts with 00:00:00); summer (array starts with 01:00:00)
+    // thus for summer time the last value is 00:00:00 and needs to be shifted to the front
+    
+    if (wind_energy_values[0].timestamp.split(" ")[1] === "01:00:00") {
+
+      wind_energy_values.unshift(wind_energy_values.pop());
+    }
+
     // add last value to index 0, as this aligns with the graph in the frontend
-    wind_energy_values.unshift(wind_energy_values.pop());
+    //wind_energy_values.unshift(wind_energy_values.pop());
     //only use the raw numbers
     const wind_energy_numbers = wind_energy_values.map((item) => {
       return (
@@ -129,7 +136,7 @@ router.get("/:region", async (req, res) => {
     });
 
 
-    console.log(hours);
+    
 
     res.render("results", {
       data: { forecastResult: forecastResult, region: region, time_frames: JSON.stringify(hours), wind_energy_numbers: JSON.stringify(wind_energy_numbers), currentDate: new Date().toLocaleDateString() },

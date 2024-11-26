@@ -115,7 +115,7 @@
     } else {
 
       const chartData = {labels: Array.from({ length: 24 }, (_, i) => i + ":00"), vals: windEnergyData, time_frames: timeFrameData}
-      console.log(timeFrameData)
+      console.log("Chartdata Values", chartData.vals)
       initializeChart(chartData)
 
     }
