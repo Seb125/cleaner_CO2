@@ -1,5 +1,5 @@
 module.exports = (req, res, next) => {
-    const token = process.env.token || "t0k3n";
+    const token = process.env.token || "7389473IOHD()DDSAHlk#";
     console.log(req.headers.apitoken, token)
 
     if (req.headers.apitoken !== token) {
