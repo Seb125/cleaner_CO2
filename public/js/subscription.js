@@ -68,7 +68,7 @@ document
     const phoneRegex = /^\+\d+(\d{10,14})$/;
     if (phoneRegex.test(formattedPhone)) {
       // Assume a backend endpoint /subscribe for whatsapp subscriptions
-      fetch("/whatsapp", {
+      fetch("/subscribe/whatsapp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

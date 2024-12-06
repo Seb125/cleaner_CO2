@@ -39,7 +39,7 @@ async function getLatestRegionsData () {
     }
 }
 
-router.post('/subscribe', async (req, res) => {
+router.post('/', async (req, res) => {
   const { email, region } = req.body;
     try {
         // Logic to save or update the Email in the database
