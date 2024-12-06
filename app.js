@@ -4,7 +4,7 @@ require("dotenv").config();
 require("./db");
 
 // strating cron job
-require("./public/js/cron-job");
+require("./controllers/cron-job");
 
 // Handles http requests (express is node js framework)
 const express = require("express");
@@ -24,7 +24,7 @@ const indexRoutes = require("./routes/index.routes");
 app.use("/", indexRoutes);
 
 const subscribeRoutes = require('./routes/subscribe.routes'); // Adjust the path as needed
-app.use('/', subscribeRoutes);
+app.use('/subscribe', subscribeRoutes);
 
 const apiRoutes = require("./routes/api.routes");
 app.use("/api", verifyToken, apiRoutes)
