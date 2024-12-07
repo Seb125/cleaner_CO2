@@ -29,19 +29,11 @@ const MongoStore = require("connect-mongo");
 const MONGO_URI =
   process.env.MONGODB_URI
 
-const cors = require("cors");
-
-const FRONTEND_URL = process.env.ORIGIN || "https://cool-cat-7adbbd.netlify.app";
 
 // Middleware configuration
 module.exports = (app) => {
 
-  // controls a very specific header to pass headers from the frontend
-  app.use(
-    cors({
-      origin: [FRONTEND_URL],
-    })
-  );
+  
   // In development environment the app logs
   app.use(logger("dev"));
 
