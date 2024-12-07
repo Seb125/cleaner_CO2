@@ -68,7 +68,6 @@ async function sendALlEmailsToSubscribers() {
 
     GMAIL_PWD = process.env.GMAIL_PWD;
 
-    console.log(GMAIL_PWD, "GMAIL")
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -76,19 +75,19 @@ async function sendALlEmailsToSubscribers() {
           pass: GMAIL_PWD
         }
       });
-        
       
+    
 
     const emailSubs = await getAllEmailSubscriptions();
 
     const regionData = await getLatestRegionsData();
-        
       
+    
+    console.log("emailSubs", emailSubs)
+    // create Email List for each specific Region
 
-      // create Email List for each specific Region
-
-      // TenneT
-      
+    // TenneT
+    
     const TennetEmailAdresses = [];
     const HertzEmailAdresses = [];
     const TransnetBWEmailAdresses = [];
@@ -111,9 +110,6 @@ async function sendALlEmailsToSubscribers() {
         }
     });
 
-      
-
-    console.log(regionData.find(function(element) {return element.region === '50Hertz'}))
 
     let HertzMailOptions = {
         from: 'sebaschwarz92@gmail.com',
@@ -144,34 +140,29 @@ async function sendALlEmailsToSubscribers() {
     };
 
     const emailOptions = [HertzMailOptions, TenneTMailOptions, TransnetBWMailOptions, AmpironMailOptions];
-
-
-    const emailPromises = emailOptions.map((emailOption) => {
-        return transporter.sendMail(emailOption, function(error, info){
-            if (error) {
-              console.log(error);
-            } else {
-              console.log('Email sent: ' + info.response);
-            }
-          });
-      });
-      
+    
+    console.log(emailOptions, "emailOptions")
 
     emailOptions.forEach((emailOption) => {
 
-        transporter.sendMail(emailOption, function(error, info){
-            if (error) {
-              console.log(error);
-            } else {
-              console.log('Email sent: ' + info.response);
-            }
-          });
+        if (emailOption.bcc.length !== 0) {
+            
+            transporter.sendMail(emailOption, function(error, info){
+                if (error) {
+                  console.log(error, "Error sending Email");
+                } else {
+                  console.log('Email sent: ' + info.response);
+                }
+              });
+        }
+        
 
     });
 
-  } catch (error) {
-    console.log(error);
-  }
+    
+} catch (error) {
+    console.log(error)
+}
 };
 
 

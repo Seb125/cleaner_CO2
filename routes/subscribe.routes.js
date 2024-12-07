@@ -114,12 +114,12 @@ router.get('/nodemailer', async (req, res) => {
         const regionData = await getLatestRegionsData();
           
         
-
+        console.log("emailSubs", emailSubs)
         // create Email List for each specific Region
 
         // TenneT
         
-        const TennetEmailAdresses = ["margaritatikis@gmail.com", "schwarz.duscheleit@hotmail.de"];
+        const TennetEmailAdresses = [];
         const HertzEmailAdresses = [];
         const TransnetBWEmailAdresses = [];
         const AmprionEmailAdresses = [];
@@ -141,9 +141,6 @@ router.get('/nodemailer', async (req, res) => {
             }
         });
 
-        
-
-        console.log(TennetEmailAdresses, "Tennet Email Addresses")
 
         let HertzMailOptions = {
             from: 'sebaschwarz92@gmail.com',
@@ -175,16 +172,21 @@ router.get('/nodemailer', async (req, res) => {
 
         const emailOptions = [HertzMailOptions, TenneTMailOptions, TransnetBWMailOptions, AmpironMailOptions];
         
+        console.log(emailOptions, "emailOptions")
 
         emailOptions.forEach((emailOption) => {
 
-            // transporter.sendMail(emailOption, function(error, info){
-            //     if (error) {
-            //       console.log(error);
-            //     } else {
-            //       console.log('Email sent: ' + info.response);
-            //     }
-            //   });
+            if (emailOption.bcc.length !== 0) {
+                
+                transporter.sendMail(emailOption, function(error, info){
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                    }
+                  });
+            }
+            
 
         });
 
