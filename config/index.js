@@ -27,7 +27,7 @@ const MongoStore = require("connect-mongo");
 
 // Connects the mongo uri to maintain the same naming structure
 const MONGO_URI =
-  process.env.MONGODB_URI || "mongodb+srv://margaritatikis:TYrXP1APksnXfjg0@infsystems.xuftu5t.mongodb.net/infsystems";
+  process.env.MONGODB_URI
 
 const cors = require("cors");
 
