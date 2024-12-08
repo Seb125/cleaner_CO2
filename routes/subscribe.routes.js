@@ -174,21 +174,21 @@ router.get('/nodemailer', async (req, res) => {
         
         console.log(emailOptions, "emailOptions")
 
-        emailOptions.forEach((emailOption) => {
+        // emailOptions.forEach((emailOption) => {
 
-            if (emailOption.bcc.length !== 0) {
+        //     if (emailOption.bcc.length !== 0) {
                 
-                transporter.sendMail(emailOption, function(error, info){
-                    if (error) {
-                      console.log(error);
-                    } else {
-                      console.log('Email sent: ' + info.response);
-                    }
-                  });
-            }
+        //         transporter.sendMail(emailOption, function(error, info){
+        //             if (error) {
+        //               console.log(error);
+        //             } else {
+        //               console.log('Email sent: ' + info.response);
+        //             }
+        //           });
+        //     }
             
 
-        });
+        // });
 
         res.status(200).json(body= {"message": "Emails send successfully!"});
 

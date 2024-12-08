@@ -2,6 +2,7 @@ const cron = require('node-cron');
 const axios = require("axios");
 const RegionData = require('../models/RegionData');
 const Email = require("../models/Email");
+const nodemailer = require('nodemailer');
 
 
 // Define an array of regions
