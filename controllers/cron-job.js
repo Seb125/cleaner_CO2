@@ -72,7 +72,7 @@ async function sendALlEmailsToSubscribers() {
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'sebaschwarz92@gmail.com',
+          user: 'energyguideforecast@gmail.com',
           pass: GMAIL_PWD
         }
       });
@@ -113,28 +113,28 @@ async function sendALlEmailsToSubscribers() {
 
 
     let HertzMailOptions = {
-        from: 'sebaschwarz92@gmail.com',
+        from: 'energyguideforecast@gmail.com',
         bcc: HertzEmailAdresses.join(),
         subject: regionData.find(function(element) {return element.region === '50Hertz'}).data.message,
         text: regionData.find(function(element) {return element.region === '50Hertz'}).data.forecast_result
       };
 
     let TenneTMailOptions = {
-        from: 'sebaschwarz92@gmail.com',
+        from: 'energyguideforecast@gmail.com',
         bcc: TennetEmailAdresses.join(),
         subject: regionData.find(function(element) {return element.region === 'TenneT'}).data.message,
         text: regionData.find(function(element) {return element.region === 'TenneT'}).data.forecast_result
     };
 
     let TransnetBWMailOptions = {
-        from: 'sebaschwarz92@gmail.com',
+        from: 'energyguideforecast@gmail.com',
         bcc: TransnetBWEmailAdresses.join(),
         subject: regionData.find(function(element) {return element.region === 'TransnetBW'}).data.message,
         text: regionData.find(function(element) {return element.region === 'TransnetBW'}).data.forecast_result
       };
 
     let AmpironMailOptions = {
-        from: 'sebaschwarz92@gmail.com',
+        from: 'energyguideforecast@gmail.com',
         bcc: AmprionEmailAdresses.join(),
         subject: regionData.find(function(element) {return element.region === 'Amprion'}).data.message,
         text: regionData.find(function(element) {return element.region === 'Amprion'}).data.forecast_result
