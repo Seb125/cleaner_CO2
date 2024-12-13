@@ -227,7 +227,7 @@ async function sendALlEmailsToSubscribers() {
 
           const footerHtml = `
       <footer>
-          <p>To stop receiving these emails, you can <a href="https://www.yourwebsite.com/unsubscribe?email=${encodeURIComponent(recipient)}">unsubscribe here</a>.</p>
+          <p>To stop receiving these emails, you can <a href="https://cleaner-tomorrow-c93527173767.herokuapp.com/unsubscribe?email=${encodeURIComponent(recipient)}">unsubscribe here</a>.</p>
       </footer>
   `;
 

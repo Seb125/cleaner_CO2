@@ -116,7 +116,7 @@ router.get('/nodemailer', async (req, res) => {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-              user: 'sebaschwarz92@gmail.com',
+              user: 'energyguideforecast@gmail.com',
               pass: GMAIL_PWD
             }
           });
@@ -178,9 +178,9 @@ router.get('/nodemailer', async (req, res) => {
     
         let AmpironMailOptions = {
             from: 'energyguideforecast@gmail.com',
-            bcc: AmprionEmailAdresses.join(),
+            bcc: "margaritatikis@gmail.com",
             subject: regionData.find(function(element) {return element.region === 'Amprion'}).data.message,
-            hmtl: `
+            html: `
                 <html>
             <head>
                 <title>Energy Forecast</title>
@@ -192,7 +192,7 @@ router.get('/nodemailer', async (req, res) => {
                     : regionData.find(function(element) { return element.region === 'Amprion' }).data.forecast_result
                 }
                 <footer>
-                    <p>To stop receiving emails from energyguideforecast@gmail.com, you can <a href="https://www.yourwebsite.com/unsubscribe?email=user@example.com">Unsubscribe here</a>.</p>
+                    <p>To stop receiving emails from energyguideforecast@gmail.com, you can <a href="http://localhost:3000/unsubscribe?email=schwarz.duscheleit@hotmail.de">Unsubscribe here</a>.</p>
                 </footer>
             </body>
         </html>
@@ -206,21 +206,18 @@ router.get('/nodemailer', async (req, res) => {
         
         console.log(emailOptions, "emailOptions")
 
-        // emailOptions.forEach((emailOption) => {
-
-        //     if (emailOption.bcc.length !== 0) {
+        
                 
-        //         transporter.sendMail(emailOption, function(error, info){
-        //             if (error) {
-        //               console.log(error);
-        //             } else {
-        //               console.log('Email sent: ' + info.response);
-        //             }
-        //           });
-        //     }
+        transporter.sendMail(AmpironMailOptions, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+            });
+            
             
 
-        // });
 
         res.status(200).json(body= {"message": "Emails send successfully!"});
 
