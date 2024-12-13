@@ -188,8 +188,27 @@ router.get('/nodemailer', async (req, res) => {
             from: 'energyguideforecast@gmail.com',
             bcc: AmprionEmailAdresses.join(),
             subject: regionData.find(function(element) {return element.region === 'Amprion'}).data.message,
-            text: extractHours(regionData.find(function(element) {return element.region === 'Amprion'}).data.forecast_result).length === 0 ? "Currently there is no data available for region Amprion" : regionData.find(function(element) {return element.region === 'Amprion'}).data.forecast_result
+            hmtl: `
+                <html>
+            <head>
+                <title>Energy Forecast</title>
+            </head>
+            <body>
+                ${
+                    extractHours(regionData.find(function(element) { return element.region === 'Amprion' }).data.forecast_result).length === 0
+                    ? "Currently there is no data available for region Amprion"
+                    : regionData.find(function(element) { return element.region === 'Amprion' }).data.forecast_result
+                }
+                <footer>
+                    <p>To stop receiving emails from energyguideforecast@gmail.com, you can <a href="https://www.yourwebsite.com/unsubscribe?email=user@example.com">Unsubscribe here</a>.</p>
+                </footer>
+            </body>
+        </html>
+            `
         };
+
+
+            
 
         const emailOptions = [HertzMailOptions, TenneTMailOptions, TransnetBWMailOptions, AmpironMailOptions];
         

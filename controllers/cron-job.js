@@ -134,52 +134,114 @@ async function sendALlEmailsToSubscribers() {
     });
 
 
-    let HertzMailOptions = {
+
+    let HertzMailOption = {
         from: 'energyguideforecast@gmail.com',
-        bcc: HertzEmailAdresses.join(),
+        bcc: "",
         subject: regionData.find(function(element) {return element.region === '50Hertz'}).data.message,
-        text: extractHours(regionData.find(function(element) {return element.region === '50Hertz'}).data.forecast_result).length === 0 ? "Currently there is no data available for region 50Hertz" : regionData.find(function(element) {return element.region === '50Hertz'}).data.forecast_result
+        html: `
+                <html>
+            <head>
+                <title>Energy Forecast</title>
+            </head>
+            <body>
+                ${
+                    extractHours(regionData.find(function(element) { return element.region === '50Hertz' }).data.forecast_result).length === 0
+                    ? "Currently there is no data available for region 50Hertz"
+                    : regionData.find(function(element) { return element.region === '50Hertz' }).data.forecast_result
+                }
+            </body>
+        </html>
+            `
       };
 
-    let TenneTMailOptions = {
+    let TenneTMailOption = {
         from: 'energyguideforecast@gmail.com',
-        bcc: TennetEmailAdresses.join(),
+        bcc: "",
         subject: regionData.find(function(element) {return element.region === 'TenneT'}).data.message,
-        text: extractHours(regionData.find(function(element) {return element.region === 'TenneT'}).data.forecast_result).length === 0 ? "Currently there is no data available for region TenneT" : regionData.find(function(element) {return element.region === 'TenneT'}).data.forecast_result
+        html: `
+                <html>
+            <head>
+                <title>Energy Forecast</title>
+            </head>
+            <body>
+                ${
+                    extractHours(regionData.find(function(element) { return element.region === 'TenneT' }).data.forecast_result).length === 0
+                    ? "Currently there is no data available for region TenneT"
+                    : regionData.find(function(element) { return element.region === 'TenneT' }).data.forecast_result
+                }
+            </body>
+        </html>
+            `
     };
 
-    let TransnetBWMailOptions = {
+    let TransnetBWMailOption = {
         from: 'energyguideforecast@gmail.com',
-        bcc: TransnetBWEmailAdresses.join(),
+        bcc: "",
         subject: regionData.find(function(element) {return element.region === 'TransnetBW'}).data.message,
-        text: extractHours(regionData.find(function(element) {return element.region === 'TransnetBW'}).data.forecast_result).length === 0 ? "Currently there is no data available for region TransnetBW" : regionData.find(function(element) {return element.region === 'TransnetBW'}).data.forecast_result
+        html: `
+                <html>
+            <head>
+                <title>Energy Forecast</title>
+            </head>
+            <body>
+                ${
+                    extractHours(regionData.find(function(element) { return element.region === 'TransnetBW' }).data.forecast_result).length === 0
+                    ? "Currently there is no data available for region TransnetBW"
+                    : regionData.find(function(element) { return element.region === 'TransnetBW' }).data.forecast_result
+                }
+            </body>
+        </html>
+            `
       };
 
-    let AmpironMailOptions = {
+    let AmpironMailOption = {
         from: 'energyguideforecast@gmail.com',
-        bcc: AmprionEmailAdresses.join(),
+        bcc: "",
         subject: regionData.find(function(element) {return element.region === 'Amprion'}).data.message,
-        text: extractHours(regionData.find(function(element) {return element.region === 'Amprion'}).data.forecast_result).length === 0 ? "Currently there is no data available for region Amprion" : regionData.find(function(element) {return element.region === 'Amprion'}).data.forecast_result
+        html: `
+                <html>
+            <head>
+                <title>Energy Forecast</title>
+            </head>
+            <body>
+                ${
+                    extractHours(regionData.find(function(element) { return element.region === 'Amprion' }).data.forecast_result).length === 0
+                    ? "Currently there is no data available for region Amprion"
+                    : regionData.find(function(element) { return element.region === 'Amprion' }).data.forecast_result
+                }
+            </body>
+        </html>
+            `
     };
 
-    const emailOptions = [HertzMailOptions, TenneTMailOptions, TransnetBWMailOptions, AmpironMailOptions];
-    
+
+    const emailOptions = [HertzMailOption, TenneTMailOption, TransnetBWMailOption, AmpironMailOption];
+    const emailRecipients = [HertzEmailAdresses, TennetEmailAdresses, TransnetBWEmailAdresses, AmprionEmailAdresses];
+
     console.log(emailOptions, "emailOptions")
 
-    emailOptions.forEach((emailOption) => {
+    emailOptions.forEach((emailOption, index) => {
 
-        if (emailOption.bcc.length !== 0) {
-            
-            transporter.sendMail(emailOption, function(error, info){
-                if (error) {
-                  console.log(error, "Error sending Email");
-                } else {
-                  console.log('Email sent: ' + info.response);
-                }
-              });
-        }
+        emailRecipients[index].forEach((recipient) => {
+
+          const footerHtml = `
+      <footer>
+          <p>To stop receiving these emails, you can <a href="https://www.yourwebsite.com/unsubscribe?email=${encodeURIComponent(recipient)}">unsubscribe here</a>.</p>
+      </footer>
+  `;
+
+          let personalizedEmailOption = {...emailOption, bcc: recipient, html: emailOption.html += footerHtml};
+
+          transporter.sendMail(personalizedEmailOption, function(error, info){
+            if (error) {
+              console.log(error, "Error sending Email");
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
+        });
         
-
     });
 
     
