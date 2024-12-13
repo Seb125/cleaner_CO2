@@ -192,7 +192,7 @@ router.get('/nodemailer', async (req, res) => {
                     : regionData.find(function(element) { return element.region === 'Amprion' }).data.forecast_result
                 }
                 <footer>
-                    <p>To stop receiving emails from energyguideforecast@gmail.com, you can <a href="http://localhost:3000/unsubscribe?email=schwarz.duscheleit@hotmail.de">Unsubscribe here</a>.</p>
+                    <p>To stop receiving emails from energyguideforecast@gmail.com, you can <a href="https://cleaner-tomorrow-c93527173767.herokuapp.com/unsubscribe?email=schwarz.duscheleit@hotmail.de">Unsubscribe here</a>.</p>
                 </footer>
             </body>
         </html>
@@ -208,13 +208,13 @@ router.get('/nodemailer', async (req, res) => {
 
         
                 
-        transporter.sendMail(AmpironMailOptions, function(error, info){
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('Email sent: ' + info.response);
-            }
-            });
+        // transporter.sendMail(AmpironMailOptions, function(error, info){
+        //     if (error) {
+        //         console.log(error);
+        //     } else {
+        //         console.log('Email sent: ' + info.response);
+        //     }
+        //     });
             
             
 

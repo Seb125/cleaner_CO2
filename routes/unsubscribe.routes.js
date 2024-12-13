@@ -13,6 +13,7 @@ router.get('/', async(req, res) => {
 
         console.log("Email deleted successfully:", deletedEmail);
         
+        return res.status(200).json({"message": "Unsubscribed successfully"});
     } catch (error) {
         console.log(error)
     }
