@@ -20,14 +20,15 @@ require("./config")(app);
 const verifyToken = require("./middleware/verifyToken");
 
 // 👇 Start handling routes here
-const indexRoutes = require("./routes/index.routes");
-app.use("/", indexRoutes);
 
 const subscribeRoutes = require('./routes/subscribe.routes'); // Adjust the path as needed
 app.use('/subscribe', subscribeRoutes);
 
 const unsubscribeRoutes = require('./routes/unsubscribe.routes'); // Adjust the path as needed
 app.use('/unsubscribe', unsubscribeRoutes);
+
+const indexRoutes = require("./routes/index.routes");
+app.use("/", indexRoutes);
 
 const apiRoutes = require("./routes/api.routes");
 app.use("/api", verifyToken, apiRoutes)

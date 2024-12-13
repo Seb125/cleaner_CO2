@@ -1,15 +1,17 @@
 const express = require("express");
-
 const router = express.Router();
+const Email = require("../models/Email");
 
 
 
 router.get('/', async(req, res) => {
     try {
 
-        userEmail = req.params;
+        userEmail = req.query;
 
-        console.log(userEmail)
+        const deletedEmail = await Email.findOneAndDelete({ email: userEmail.email });
+
+        console.log("Email deleted successfully:", deletedEmail);
         
     } catch (error) {
         console.log(error)
