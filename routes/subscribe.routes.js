@@ -105,15 +105,7 @@ router.post('/whatsapp', async (req, res) => {
     }
 });
 
-router.get('/deleteSubscriptions', async (req, res) => {
-    try {
-        await Email.deleteMany({});
-        res.status(200).send({message: "Deleting Done"})
-    } catch (error) {
-        console.log(error)
-    }
-    
-})
+
 
 router.get('/nodemailer', async (req, res) => {
     
