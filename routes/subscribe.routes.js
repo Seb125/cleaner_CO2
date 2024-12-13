@@ -37,7 +37,29 @@ async function getLatestRegionsData () {
     } catch (error) {
         console.log(error)
     }
-}
+};
+
+const extractHours = (forecastResult) => {
+
+    // Extract time frames form text data
+    const timeRangePattern =
+      /(\b([01]?[0-9]|2[0-3]):[0-5][0-9] to \b([01]?[0-9]|2[0-3]):[0-5][0-9]\b)/g;
+    let match;
+    const hours = [];
+    
+    while ((match = timeRangePattern.exec(forecastResult)) !== null) {
+      // Extract the start hour and end hour
+      const startHour = match[0].split(":")[0]; // Get the hour before the first colon
+      const endHour = match[0].split("to")[1].split(":")[0].trim(); // Get the hour before the second colon
+  
+      hours.push({
+        start: parseInt(startHour, 10),
+        end: parseInt(endHour, 10),
+      });
+    }
+  
+    return hours;
+  };
 
 router.post('/', async (req, res) => {
   const { email, region } = req.body;
@@ -141,33 +163,32 @@ router.get('/nodemailer', async (req, res) => {
             }
         });
 
-
         let HertzMailOptions = {
-            from: 'sebaschwarz92@gmail.com',
+            from: 'energyguideforecast@gmail.com',
             bcc: HertzEmailAdresses.join(),
             subject: regionData.find(function(element) {return element.region === '50Hertz'}).data.message,
-            text: regionData.find(function(element) {return element.region === '50Hertz'}).data.forecast_result
+            text: extractHours(regionData.find(function(element) {return element.region === '50Hertz'}).data.forecast_result).length === 0 ? "Currently there is no data available for region 50Hertz" : regionData.find(function(element) {return element.region === '50Hertz'}).data.forecast_result
           };
-
+    
         let TenneTMailOptions = {
-            from: 'sebaschwarz92@gmail.com',
+            from: 'energyguideforecast@gmail.com',
             bcc: TennetEmailAdresses.join(),
             subject: regionData.find(function(element) {return element.region === 'TenneT'}).data.message,
-            text: regionData.find(function(element) {return element.region === 'TenneT'}).data.forecast_result
+            text: extractHours(regionData.find(function(element) {return element.region === 'TenneT'}).data.forecast_result).length === 0 ? "Currently there is no data available for region TenneT" : regionData.find(function(element) {return element.region === 'TenneT'}).data.forecast_result
         };
-
+    
         let TransnetBWMailOptions = {
-            from: 'sebaschwarz92@gmail.com',
+            from: 'energyguideforecast@gmail.com',
             bcc: TransnetBWEmailAdresses.join(),
             subject: regionData.find(function(element) {return element.region === 'TransnetBW'}).data.message,
-            text: regionData.find(function(element) {return element.region === 'TransnetBW'}).data.forecast_result
+            text: extractHours(regionData.find(function(element) {return element.region === 'TransnetBW'}).data.forecast_result).length === 0 ? "Currently there is no data available for region TransnetBW" : regionData.find(function(element) {return element.region === 'TransnetBW'}).data.forecast_result
           };
-
+    
         let AmpironMailOptions = {
-            from: 'sebaschwarz92@gmail.com',
+            from: 'energyguideforecast@gmail.com',
             bcc: AmprionEmailAdresses.join(),
             subject: regionData.find(function(element) {return element.region === 'Amprion'}).data.message,
-            text: regionData.find(function(element) {return element.region === 'Amprion'}).data.forecast_result
+            text: extractHours(regionData.find(function(element) {return element.region === 'Amprion'}).data.forecast_result).length === 0 ? "Currently there is no data available for region Amprion" : regionData.find(function(element) {return element.region === 'Amprion'}).data.forecast_result
         };
 
         const emailOptions = [HertzMailOptions, TenneTMailOptions, TransnetBWMailOptions, AmpironMailOptions];

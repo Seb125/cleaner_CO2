@@ -106,7 +106,7 @@ router.get("/:region", async (req, res) => {
       .skip(1)
       .limit(1);
       latestData = result[0]
-      console.log("Latest Data", latestData)
+      console.log("Second Latest Data", latestData)
       // replace hours with second latest data available
       forecastResult = latestData.data.forecast_result;
       hours = extractHours(forecastResult)
