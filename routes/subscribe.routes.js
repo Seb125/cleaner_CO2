@@ -5,6 +5,8 @@ const RegionData = require('../models/RegionData'); // Adjust the path as needed
 const Email = require("../models/Email");
 const Phone = require("../models/Phone");
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+
 
 const regions = ["50Hertz", "TenneT", "TransnetBW", "Amprion"];
 
@@ -59,6 +61,16 @@ const extractHours = (forecastResult) => {
     }
   
     return hours;
+  };
+
+  function generateUnsubscribeLink(email, baseUrl) {
+    // Hash the email using SHA-256
+    const hash = crypto.createHash('sha256').update(email).digest('hex');
+  
+    // Construct the unsubscribe link
+    const unsubscribeLink = `${baseUrl}?emailHash=${hash}`;
+  
+    return unsubscribeLink;
   };
 
 router.post('/', async (req, res) => {
@@ -178,7 +190,7 @@ router.get('/nodemailer', async (req, res) => {
     
         let AmpironMailOptions = {
             from: 'energyguideforecast@gmail.com',
-            bcc: "margaritatikis@gmail.com",
+            bcc: "schwarz.duscheleit@hotmail.de",
             subject: regionData.find(function(element) {return element.region === 'Amprion'}).data.message,
             html: `
                 <html>
@@ -191,9 +203,6 @@ router.get('/nodemailer', async (req, res) => {
                     ? "Currently there is no data available for region Amprion"
                     : regionData.find(function(element) { return element.region === 'Amprion' }).data.forecast_result
                 }
-                <footer>
-                    <p>To stop receiving emails from energyguideforecast@gmail.com, you can <a href="https://cleaner-tomorrow-c93527173767.herokuapp.com/unsubscribe?email=schwarz.duscheleit@hotmail.de">Unsubscribe here</a>.</p>
-                </footer>
             </body>
         </html>
             `
@@ -206,9 +215,15 @@ router.get('/nodemailer', async (req, res) => {
         
         console.log(emailOptions, "emailOptions")
 
-        
+        const unsubscribeLink = generateUnsubscribeLink("schwarz.duscheleit@hotmail.de", "https://cleaner-tomorrow-c93527173767.herokuapp.com/unsubscribe")
                 
-        // transporter.sendMail(AmpironMailOptions, function(error, info){
+        const footerHtml = `
+      <footer>
+          <p>To stop receiving these emails, you can <a href="${unsubscribeLink}">Unsubscribe here</a>.</p>
+      </footer>
+  `;
+        
+        // transporter.sendMail({...AmpironMailOptions, html: AmpironMailOptions.html += footerHtml}, function(error, info){
         //     if (error) {
         //         console.log(error);
         //     } else {

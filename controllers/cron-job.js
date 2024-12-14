@@ -3,7 +3,7 @@ const axios = require("axios");
 const RegionData = require('../models/RegionData');
 const Email = require("../models/Email");
 const nodemailer = require('nodemailer');
-
+const crypto = require('crypto');
 
 // Define an array of regions
 const regions = ["50Hertz", "TenneT", "TransnetBW", "Amprion"];
@@ -82,7 +82,17 @@ const extractHours = (forecastResult) => {
   }
 
   return hours;
-}
+};
+
+function generateUnsubscribeLink(email, baseUrl) {
+  // Hash the email using SHA-256
+  const hash = crypto.createHash('sha256').update(email).digest('hex');
+
+  // Construct the unsubscribe link
+  const unsubscribeLink = `${baseUrl}?emailHash=${hash}`;
+
+  return unsubscribeLink;
+};
 
 
 async function sendALlEmailsToSubscribers() {
@@ -225,9 +235,11 @@ async function sendALlEmailsToSubscribers() {
 
         emailRecipients[index].forEach((recipient) => {
 
+          const unsubscribeLink = generateUnsubscribeLink(recipient, "https://cleaner-tomorrow-c93527173767.herokuapp.com/unsubscribe")
+
           const footerHtml = `
       <footer>
-          <p>To stop receiving these emails, you can <a href="https://cleaner-tomorrow-c93527173767.herokuapp.com/unsubscribe?email=${encodeURIComponent(recipient)}">unsubscribe here</a>.</p>
+          <p>To stop receiving these emails, you can <a href="${unsubscribeLink}">Unsubscribe here</a>.</p>
       </footer>
   `;
 
