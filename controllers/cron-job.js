@@ -118,8 +118,6 @@ async function sendALlEmailsToSubscribers() {
     
     console.log("emailSubs", emailSubs)
     // create Email List for each specific Region
-
-    // TenneT
     
     const TennetEmailAdresses = [];
     const HertzEmailAdresses = [];
@@ -129,16 +127,16 @@ async function sendALlEmailsToSubscribers() {
     emailSubs.forEach((emailSub) => {
         switch (emailSub.region) {
             case "50Hertz":
-                HertzEmailAdresses.push(emailSub.email);
+                HertzEmailAdresses.push(emailSub);
                 break;
             case "TenneT":
-                TennetEmailAdresses.push(emailSub.email);
+                TennetEmailAdresses.push(emailSub);
                 break;
             case "TransnetBW":
-                TransnetBWEmailAdresses.push(emailSub.email);
+                TransnetBWEmailAdresses.push(emailSub);
                 break;
             case "Amprion":
-                AmprionEmailAdresses.push(emailSub.email);
+                AmprionEmailAdresses.push(emailSub);
                 break;
         }
     });
@@ -235,7 +233,7 @@ async function sendALlEmailsToSubscribers() {
 
         emailRecipients[index].forEach((recipient) => {
 
-          const unsubscribeLink = generateUnsubscribeLink(recipient, "https://cleaner-tomorrow-c93527173767.herokuapp.com/unsubscribe")
+          const unsubscribeLink = generateUnsubscribeLink(String(recipient), "https://cleaner-tomorrow-c93527173767.herokuapp.com/unsubscribe")
 
           const footerHtml = `
       <footer>
@@ -243,7 +241,7 @@ async function sendALlEmailsToSubscribers() {
       </footer>
   `;
 
-          let personalizedEmailOption = {...emailOption, bcc: recipient, html: emailOption.html += footerHtml};
+          let personalizedEmailOption = {...emailOption, bcc: recipient.email, html: emailOption.html += footerHtml};
 
           transporter.sendMail(personalizedEmailOption, function(error, info){
             if (error) {

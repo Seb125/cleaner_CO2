@@ -24,7 +24,7 @@ router.get('/', async(req, res) => {
         let unsubscribePromise;
 
         emailSubs.forEach((email) => {
-            emailHash = generateEmailHash(email.email);
+            emailHash = generateEmailHash(String(email));
             if (emailHash == unsubscribeHash) {
                 console.log("email hashes match!")
 
