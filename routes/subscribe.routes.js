@@ -6,6 +6,8 @@ const Email = require("../models/Email");
 const Phone = require("../models/Phone");
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const EmailVerification = require("../models/EmailVerification");
+
 
 
 const regions = ["50Hertz", "TenneT", "TransnetBW", "Amprion"];
@@ -73,6 +75,10 @@ const extractHours = (forecastResult) => {
     return unsubscribeLink;
   };
 
+  const generateToken = () => {
+    return crypto.randomBytes(32).toString('hex'); // Generates a 64-character random string
+};
+
 router.post('/', async (req, res) => {
   const { email, region } = req.body;
     try {
@@ -81,19 +87,98 @@ router.post('/', async (req, res) => {
         if (existingEmail) {
             // Update existing Email if necessary
             console.log(`Email already exists for ${email} in ${region}`);
+            res.status(200).json({message: "Email already exists"})
         } else {
-            // Create a new Email
-            const newEmail = new Email({ email, region });
-            await newEmail.save();
-            // Send confirmation email
-            console.log(`New Email created for ${email} in ${region}`);
+
+            // Generate Token for verification Email
+
+            const token = generateToken();
+
+            // Create a new Email Verification
+            const newEmailVerification = new EmailVerification({ email, region, token });
+            await newEmailVerification.save();
+
+            // Send Email for Confirmation
+            GMAIL_PWD = process.env.GMAIL_PWD;
+
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'energyguideforecast@gmail.com',
+                    pass: GMAIL_PWD
+                }
+                });
+
+            let verifyOption = {
+                from: 'energyguideforecast@gmail.com',
+                bcc: email,
+                subject: "Your subscription to a Cleaner Tomorrow",
+                html: `
+                <html>
+                    <head>
+                        <title>
+                            Thank you for subscribing to A cleaner tomorrow!
+                        </title>
+                    </head>
+                    <body>
+                        To verify your subscription, please click the following link: <a href="http://localhost/subscribe/verify/${token}">Subscribe</a>
+                    </body>
+                </html>
+                Thank you dor subscribing to 'Cleaner Tomorrow' Please click`
+                };
+        
+            
+            transporter.sendMail(verifyOption, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+            });
+
+            res.status(200).send('Email successful');
         }
-        res.status(200).send('Email successful');
+        
     } catch (error) {
         console.error('Email error:', error);
         res.status(500).send('Error processing Email');
     }
 });
+
+router.get('/verify/:token', async (req, res) => {
+    const token = req.params.token;
+      try {
+          console.log("Token", token
+          )
+          // Logic to save or update the Email in the database
+          const existingEmailVerification = await EmailVerification.findOne({ token });
+          console.log(existingEmailVerification)
+          if (existingEmailVerification) {
+
+            // Logic to save or update the Email in the database
+            const existingEmail = await Email.findOne({ email: existingEmailVerification.email, region: existingEmailVerification.region });
+            if (existingEmail) {
+                // Update existing Email if necessary
+                res.status(200).json({message: "Email already exists"})
+            } else {
+                const newEmail = new Email({ email: existingEmailVerification.email, region: existingEmailVerification.region });
+                await newEmail.save();
+                // Send confirmation email
+                res.status(200).send('Email verified successful');
+
+            }
+            // Create a new Email
+            
+          } else {
+            res.status(200).send('Email Token not found');
+          }
+          
+
+      } catch (error) {
+          console.error('Email error:', error);
+          res.status(500).send('Error processing Email');
+      }
+  });
 
 router.post('/whatsapp', async (req, res) => {
   const { phone, region } = req.body;
