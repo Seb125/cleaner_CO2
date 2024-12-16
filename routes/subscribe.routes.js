@@ -121,7 +121,7 @@ router.post('/', async (req, res) => {
                         </title>
                     </head>
                     <body>
-                        To verify your subscription, please click the following link: <a href="http://localhost/subscribe/verify/${token}">Subscribe</a>
+                        To verify your subscription, please click the following link: <a href="https://cleaner-tomorrow-c93527173767.herokuapp.com/subscribe/verify/${token}">Subscribe</a>
                     </body>
                 </html>
                 Thank you dor subscribing to 'Cleaner Tomorrow' Please click`
