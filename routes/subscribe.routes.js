@@ -123,8 +123,7 @@ router.post('/', async (req, res) => {
                     <body>
                         To verify your subscription, please click the following link: <a href="https://cleaner-tomorrow-c93527173767.herokuapp.com/subscribe/verify/${token}">Subscribe</a>
                     </body>
-                </html>
-                Thank you dor subscribing to 'Cleaner Tomorrow' Please click`
+                </html>`
                 };
         
             
@@ -159,18 +158,19 @@ router.get('/verify/:token', async (req, res) => {
             const existingEmail = await Email.findOne({ email: existingEmailVerification.email, region: existingEmailVerification.region });
             if (existingEmail) {
                 // Update existing Email if necessary
-                res.status(200).json({message: "Email already exists"})
+                res.render("emailVerification", {message: "Your Email is already registered for this regions daily recommendations."});
             } else {
                 const newEmail = new Email({ email: existingEmailVerification.email, region: existingEmailVerification.region });
                 await newEmail.save();
                 // Send confirmation email
-                res.status(200).send('Email verified successful');
+                res.render("emailVerification", {message: "You email was successfully verified! Enjoy our daily green energy forecasts."});
 
             }
             // Create a new Email
             
           } else {
-            res.status(200).send('Email Token not found');
+            res.render("emailVerification", {message: "The verification token is invalid, please try to subscribe again."});
+
           }
           
 

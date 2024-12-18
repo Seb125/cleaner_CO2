@@ -28,7 +28,7 @@ document
             );
           }
           emailSubscriptionForm.innerHTML =
-            '<p class="m-3">Thank you for subscribing to our daily Email recomendations!</p>';
+            '<p class="m-3">Thank you for subscribing to our daily Email recomendations! A confirmation email has been send to you.</p>';
           //return response.json(); // This is a Promise
         })
         .catch((error) => {
