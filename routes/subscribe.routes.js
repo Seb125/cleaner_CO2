@@ -275,7 +275,7 @@ router.get('/nodemailer', async (req, res) => {
     
         let AmpironMailOptions = {
             from: 'energyguideforecast@gmail.com',
-            bcc: "schwarz.duscheleit@hotmail.de",
+            bcc: "",
             subject: regionData.find(function(element) {return element.region === 'Amprion'}).data.message,
             html: `
                 <html>
